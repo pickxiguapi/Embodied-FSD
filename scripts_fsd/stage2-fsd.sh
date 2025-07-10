@@ -1,14 +1,14 @@
 #!/bin/bash
 
-DATA_PATH='/mnt/kaiwu-group-x4/iffyuan/all-seeing/all-seeing-v2/process_data/merged_fsd_training_visual_aids_generation_&_reasoning_v2.json'
-IMAGE_FOLDER=/mnt/kaiwu-group-x4-sh/iffyuan/llava_instruct_datasets/download/llava-v1.5-instruct
+DATA_PATH="./FSD-Stage2-Dataset.json"
+IMAGE_FOLDER="./data"
 
-PROJECT_NAME="asmv2_13b_stage4_ft_fsd_generation_&_reasoning_data_42k"
+PROJECT_NAME="FSD-Stage2"
 mkdir -p "logs/$(dirname "${PROJECT_NAME}")"
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero3_offload.json \
-    --model_name_or_path /mnt/kaiwu-group-x4/iffyuan/all-seeing/all-seeing-v2/checkpoints/asmv2_13b_stage3_ft_fsd_with_robotics_data_1400k_llava \
+    --model_name_or_path /path/to/FSD-Stage1-Checkpoints \
     --version v2 \
     --data_path ${DATA_PATH} \
     --image_folder ${IMAGE_FOLDER} \

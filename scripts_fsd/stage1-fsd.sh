@@ -1,9 +1,9 @@
 #!/bin/bash
 
-DATA_PATH='/mnt/kaiwu-group-x4/iffyuan/all-seeing/all-seeing-v2/process_data/merged_asm_training_data_1_4m_v3.json'
-IMAGE_FOLDER=/mnt/kaiwu-group-x4-sh/iffyuan/llava_instruct_datasets/download/llava-v1.5-instruct
+DATA_PATH="./FSD-Stage1-Dataset.json"
+IMAGE_FOLDER="./data"
 
-PROJECT_NAME="asmv2_13b_stage3_ft_fsd_with_robotics_data_1400k"
+PROJECT_NAME="FSD-Stage1"
 mkdir -p "logs/$(dirname "${PROJECT_NAME}")"
 
 deepspeed llava/train/train_mem.py \

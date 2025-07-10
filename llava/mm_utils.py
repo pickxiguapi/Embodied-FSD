@@ -31,10 +31,23 @@ def process_images(images, image_processor, model_cfg):
     if image_aspect_ratio == 'pad':
         for image in images:
             image = expand2square(image, tuple(int(x*255) for x in image_processor.image_mean))
-            image = image_processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
+            # 修复图像预处理问题，添加适当的参数
+            try:
+                image = image_processor.preprocess(image, return_tensors='pt', padding=True)['pixel_values'][0]
+            except:
+                # 备用方案：使用 __call__ 方法
+                image = image_processor(image, return_tensors='pt')['pixel_values'][0]
             new_images.append(image)
     else:
-        return image_processor(images, return_tensors='pt')['pixel_values']
+        try:
+            return image_processor(images, return_tensors='pt', padding=True)['pixel_values']
+        except:
+            # 如果批处理失败，逐个处理
+            processed_images = []
+            for img in images:
+                processed_img = image_processor(img, return_tensors='pt')['pixel_values'][0]
+                processed_images.append(processed_img)
+            return torch.stack(processed_images, dim=0)
     if all(x.shape == new_images[0].shape for x in new_images):
         new_images = torch.stack(new_images, dim=0)
     return new_images

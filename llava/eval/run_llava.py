@@ -137,7 +137,7 @@ def eval_model(args):
     if outputs.endswith(stop_str):
         outputs = outputs[: -len(stop_str)]
     outputs = outputs.strip()
-    print(outputs)
+    return outputs
 
 
 if __name__ == "__main__":
