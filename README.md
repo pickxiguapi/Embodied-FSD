@@ -28,6 +28,7 @@ Figure 2: Spatial relationship-focused reasoning process (SrCoT).
 
 ## 📰 News
 
+- **[2025-07]** ⚡️ We have updated SIMPLER ENV branch and LLM-based evaluation!  
 - **[2025-07]** 🔬 We have updated the detailed training, inference, and evaluation code and readme. VABench evaluation benchmark is officially released!
 - **[2025-05]** 📝 Code repository is now public - welcome to try FSD for robotic manipulation!
 
@@ -210,11 +211,89 @@ We used the [lmms-eval](https://github.com/EvolvingLMMs-Lab/lmms-eval) framework
 
 `vabench_point_dataset.parquet` and `vabench_visual_trace_dataset.parquet` are used for VABench-Point and VABench-Visual Trace, respectively. In the parquet files, the `instruction` column contains the task instructions, the `images` column contains the images, and the `answer` column contains the answers. When evaluating VABench-Point, we calculate the proportion of predicted points that fall within the answer bounding boxes as the accuracy. For VABench-Visual Trace, we compute the MAE and RMSE between the predicted trajectories and the ground-truth trajectories. Note that, to ensure fair comparison across images of different sizes, both the predicted results and the ground-truth results are converted to the 0-1000 normalized coordinate system of the padded images (since FSD predictions are already in this format, no conversion is needed for them).
 
-*The code for evaluation using GPT is to be updated.*
+We have also provided a method for evaluating visual trace generation using LLM-based evaluation. 
+
+Step 1️⃣: Get Model Output 
+```
+Task instruction: Put the orange object inside the basket.
+FSD output: 
+<Description>The image shows an <ref>orange object</ref><box>[[622, 424, 763, 583]]</box> sitting in a blue sink. To the left of the sink is a <ref>yellow dish rack</ref><box>[[19, 174, 494, 477]]</box>. A white spatula is positioned in front of the orange object.\n
+</Description>
+<Reasoning>\nTo move the orange object into the yellow dish rack, start by identifying the current position of the orange object at <point>[[694, 540]]</point>. \nLift the object slightly upwards and to the left, moving towards the dish rack. \nThe path should curve gently to avoid any obstacles, passing through intermediate points like <point>[[639, 440]]</point> and <point>[[513, 340]]</point>. \nFinally, lower the object into the dish rack, ending at the target position <box>[[213, 273, 339, 419]]</box> with the final point at <point>[[257, 390]]</point>.
+</Reasoning>
+<Answer>The visual trace for placing the orange object into the yellow dish rack is \n<point>[[694, 540], [682, 515], [639, 440], [597, 377], [513, 340], [419, 330], [337, 343], [257, 390]]</point>.
+</Answer>
+```
+Step 2️⃣: Visualization
+
+<img src="assets/llm-eval.png" width="400" alt="Visualization result with predicted points">
+
+Step 3️⃣: LLM Evaluation
+
+We need to input prompts containing instructions along with visualized images, and have LLM perform the scoring. 
+
+Here is the prompt:
+```
+You are an expert evaluator in robotic manipulation and visual reasoning. Your job is to assess the quality of predicted trajectories based on task instructions and visual inputs.
+
+You are given:
+- A task instruction describing an object manipulation task.
+- An image showing a predicted trajectory.
+
+**Note:**
+- In the image, the red circle indicates the start point, and the blue diamond indicates the end point.
+- The trajectory represents the predicted movement path of the manipulated object, not the robot or end-effector.
+- You should **evaluate the predicted trajectory as a proposed motion for the object that is supposed to be moved**, based on the task instruction — **not based on the static positions of objects in the image**. The objects have not actually moved.
+
+**Evaluation Criteria (listed in order of importance):**
+
+1. **Task Alignment and Success (most important)**  
+   - Does the trajectory clearly and accurately fulfill the task instruction?  
+   - **The trajectory must start at the correct location and end at a target position that aligns with the task goal.**  
+   - Large deviations in the starting or ending point (e.g., wrong object, wrong destination, or stopping short of the goal) should result in a low score, even if the rest of the trajectory is smooth.  
+   - If the task is not accomplished (due to incorrect goal interpretation or spatial execution), the score should be low regardless of other qualities.
+
+2. **Feasibility**  
+   - Is the movement physically plausible, smooth, and continuous?  
+   - Are there any unrealistic discontinuities, sharp turns, or impossible transitions?  
+   - Even if the movement is feasible, it should not receive a high score if the task is not completed.
+
+3. **Obstacle Avoidance / Safety**  
+   - Does the trajectory reasonably avoid collisions with surrounding objects?  
+   - Minor risks may be tolerated if the task is completed successfully, but major or clear collisions should reduce the score.
+
+**Scoring Guideline:**
+- If the task is **not accomplished**, or if the start or end point is significantly incorrect, the score should typically be **4 or below**.
+- If the task is completed but the trajectory has issues (e.g., roughness, minor risk of collision), a score in the **6–8** range is appropriate.
+- A **score of 9–10** should be given only when the trajectory clearly completes the task, with good start/end accuracy, smooth motion, and reasonable safety.
+
+Based on these criteria, provide a single overall score from 1 (very poor) to 10 (excellent), reflecting how well the task is accomplished.
+
+Respond strictly in the following format:
+Score: <1-10>  
+Explanation: <brief justification>
+
+The task instruction is:  
+{task_instruction}
+
+Please give your response.
+```
+
+LLM Output:
+```
+Score: 10
+Explanation: The trajectory starts at the orange object and ends inside the basket, accurately fulfilling the instruction to put the orange object inside the basket. The path is smooth, continuous, and physically plausible, with no sharp turns or unrealistic movements. There is no significant risk of collision with other objects. Task is fully accomplished with good safety and feasibility.
+```
+
+The complete visualization and evaluation code can be executed:
+```bash
+cd Embodied-FSD-Github/visual_trace_llm_score
+python gpt_score_example.py
+```
 
 ### SIMPLERENV Evaluation
 
-Clean code ing...Coming soon...
+We refer to the [SIMPLERENV FSD branch](https://github.com/hilookas/SimplerEnv/tree/fsd).
 
 ---
 
