@@ -1,8 +1,10 @@
-# From Seeing to Doing: Bridging Reasoning and Decision for Robotic Manipulation (Embodied-FSD)
+# From Seeing to Doing: Bridging Reasoning and Decision for Robotic Manipulation (Embodied-FSD) [ICLR 2026]
 
 <div align="center">
 
 **From Seeing to Doing: Bridging Reasoning and Decision for Robotic Manipulation**
+
+**ICLR 2026**
 
 [[🌐 Website](https://embodied-fsd.github.io)] [[📄 Paper](https://arxiv.org/pdf/2505.08548)] [[🤗 Models](https://huggingface.co/collections/IffYuan/fsd-683fa0d552e70f302fd04b34)] [[🎯 Datasets](https://huggingface.co/collections/IffYuan/fsd-683fa0d552e70f302fd04b34)] [[💬 Demo](#demo)]
 
@@ -28,6 +30,7 @@ Figure 2: Spatial relationship-focused reasoning process (SrCoT).
 
 ## 📰 News
 
+- **[2026-01]** 🎉 Accepted to ICLR 2026!
 - **[2025-07]** ⚡️ We have updated SIMPLER ENV branch and LLM-based evaluation!  
 - **[2025-07]** 🔬 We have updated the detailed training, inference, and evaluation code and readme. VABench evaluation benchmark is officially released!
 - **[2025-05]** 📝 Code repository is now public - welcome to try FSD for robotic manipulation!
@@ -322,13 +325,17 @@ This project is licensed under the Apache 2.0 License. For details, please see t
 
 If you use FSD in your research, please cite our paper:
 ```
-@misc{yuan2025seeingdoingbridgingreasoning,
-      title={From Seeing to Doing: Bridging Reasoning and Decision for Robotic Manipulation}, 
-      author={Yifu Yuan and Haiqin Cui and Yibin Chen and Zibin Dong and Fei Ni and Longxin Kou and Jinyi Liu and Pengyi Li and Yan Zheng and Jianye Hao},
-      year={2025},
-      eprint={2505.08548},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO},
-      url={https://arxiv.org/abs/2505.08548}, 
+@article{yuan2026seeing,
+  title={From seeing to doing: Bridging reasoning and decision for robotic manipulation},
+  author={Yuan, Yifu and Cui, Haiqin and Chen, Yibin and Dong, Zibin and Ni, Fei and Kou, Longxin and Liu, Jinyi and Li, Pengyi and Zheng, Yan and Hao, Jianye},
+  journal={The Fourteenth International Conference on Learning Representations},
+  year={2026}
+}
+
+@article{yuan2026embodied,
+  title={Embodied-r1: Reinforced embodied reasoning for general robotic manipulation},
+  author={Yuan, Yifu and Cui, Haiqin and Huang, Yaoting and Chen, Yibin and Ni, Fei and Dong, Zibin and Li, Pengyi and Zheng, Yan and Hao, Jianye},
+  journal={The Fourteenth International Conference on Learning Representations},
+  year={2026}
 }
 ```
