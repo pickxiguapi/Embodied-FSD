@@ -30,6 +30,7 @@ Figure 2: Spatial relationship-focused reasoning process (SrCoT).
 
 ## 📰 News
 
+- **[2026-03]** 🤗 VABench-P and VABench-V benchmarks are now available on Hugging Face Datasets: [[VABench-P](https://huggingface.co/datasets/IffYuan/VABench-P)] [[VABench-V](https://huggingface.co/datasets/IffYuan/vabench-v)]
 - **[2026-01]** 🎉 Accepted to ICLR 2026!
 - **[2025-07]** ⚡️ We have updated SIMPLER ENV branch and LLM-based evaluation!  
 - **[2025-07]** 🔬 We have updated the detailed training, inference, and evaluation code and readme. VABench evaluation benchmark is officially released!
